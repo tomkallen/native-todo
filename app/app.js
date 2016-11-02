@@ -71,7 +71,7 @@ class Note {
             Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
             .substring(1);
-        return sub() + sub() + "-" + sub() + sub() + "-" + sub() + sub() + "-" + sub() + sub();
+        return sub() + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
     }
 
     parseTags(body) {
@@ -79,9 +79,9 @@ class Note {
     }
 
     parseBody(body) {
-        return body
-            .map(element => element.charAt(0) === "#" ? element = "<span>" + element + "</span>" : element)
-            .join(" ");
+        return body.map(element => element.charAt(0) === "#" ?
+            element = "<span>" + element + "</span>" :
+            element).join(" ");
     }
 
 }
