@@ -1,26 +1,29 @@
 const alphaNode = document.getElementById('note-text');
 const container = document.getElementById('note-container');
+
 let notesArray = [];
 
 storageIsAvailable() && initDB();
 
 alphaNode.addEventListener('keypress', event => {
+
     if (event.which === 13) {
         event.preventDefault();
         alphaNode.blur();
         createNewNote(alphaNode);
     }
+
 });
 
 function renderNote(note) {
-    let bodyDiv = document.createElement('div');
-    let tagsDiv = document.createElement('div');
-    tagsDiv.className = "todo-tag-list";
-    bodyDiv.id = note.id;
-    bodyDiv.innerHTML = note.body;
-    tagsDiv.innerHTML = note.tags;
+
+    let [bodyDiv, tagsDiv] = [node('div'), node('li')];
+    let { body, tags, id } = note;
+    [bodyDiv.id, bodyDiv.innerHTML, tagsDiv.innerHTML] = [id, body, tags];
     container.appendChild(bodyDiv);
+    tagsDiv.className = "todo-tag-list";
     container.appendChild(tagsDiv);
+
 }
 
 function createNewNote(node) {
@@ -29,20 +32,24 @@ function createNewNote(node) {
         .replace(/&nbsp;/, " ")
         .split(" ");
     let note = new Note(body);
-
     renderNote(note);
-
     return storageIsAvailable() ? localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) : notesArray.push(note);
 
 }
 
+function node(element) {
+
+    return document.createElement(element);
+
+}
+
 function initDB() {
+
     for (let item in localStorage) {
         let note = JSON.parse(localStorage[item])
-        if (note.body && note.id) {
-            renderNote(note);
-        }
+        note.body && renderNote(note);
     }
+
 }
 
 function storageIsAvailable() {
