@@ -2,10 +2,14 @@ const alphaNode = document.getElementById('note-text');
 const container = document.getElementById('note-container');
 
 let notesArray = [];
+// notesArray is the fallback for localstorage DB
 
 storageIsAvailable() && initDB();
+// Initializing and rendering the localstorage database
+// only if it is available:
 
 alphaNode.addEventListener('keypress', event => {
+    // On Enter parse and store the note
 
     if (event.which === 13) {
         event.preventDefault();
@@ -15,7 +19,7 @@ alphaNode.addEventListener('keypress', event => {
 
 });
 
-function renderNote(note) {
+function render(note) {
 
     let [bodyDiv, tagsDiv] = [node('div'), node('li')];
     let { body, tags, id } = note;
@@ -29,15 +33,15 @@ function renderNote(note) {
 function createNewNote(node) {
 
     let body = node.innerHTML
-        .replace(/&nbsp;/, " ")
+        .replace(/&nbsp;/, " ") // get rid of nonbreakings
         .split(" ");
     let note = new Note(body);
-    renderNote(note);
+    render(note);
     return storageIsAvailable() ? localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) : notesArray.push(note);
 
 }
 
-function node(element) {
+function node(element = 'div') {
 
     return document.createElement(element);
 
@@ -47,7 +51,7 @@ function initDB() {
 
     for (let item in localStorage) {
         let note = JSON.parse(localStorage[item])
-        note.body && renderNote(note);
+        note.body && render(note);
     }
 
 }
