@@ -1,7 +1,8 @@
-const alphaNode = document.getElementById('note-text');
+const inputField = document.getElementById('note-text');
 const container = document.getElementById('note-container');
-const deleteButtonList = document.getElementsByClassName('button-delete');
 
+let pristine = true;
+// checks whether 'input field'' was clicked
 let notesArray = [];
 // notesArray is the fallback for localstorage DB
 
@@ -9,13 +10,13 @@ storageIsAvailable() && initDB();
 // Initializing and rendering the localstorage database
 // only if it is available:
 
-alphaNode.addEventListener('keypress', event => {
+inputField.addEventListener('keypress', event => {
     // On Enter parse and store the note
 
     if (event.which === 13) {
         event.preventDefault();
-        alphaNode.blur();
-        createNewNote(alphaNode);
+        inputField.blur();
+        createNewNote(inputField);
     }
 
 });
@@ -23,6 +24,11 @@ alphaNode.addEventListener('keypress', event => {
 document.addEventListener('click', e => {
 
     ofClass(e.target, 'button-delete') && e.target.parentElement.remove();
+    if (ofClass(e.target, 'input-field')) {
+        pristine = false;
+        document.getElementsByClassName('blinking-cursor')[0].remove();
+        e.target.innerHTML = '';
+    }
 
 });
 
@@ -59,8 +65,9 @@ function createNewNote(node) {
 }
 
 function node(element = 'div', _class, _html) {
+
     let node = document.createElement(element);
-    if (_class) node.className = _class;
+    if (_class) node.className += " " + _class;
     if (_html) node.innerHTML = _html
     return node;
 
@@ -76,6 +83,7 @@ function initDB() {
 }
 
 function storageIsAvailable() {
+    // Checking availability of local storgae for the user
 
     try {
         localStorage.setItem("null", "null");
@@ -106,10 +114,10 @@ class Note {
 
     parseTags(body) {
         let newSpan = node("span", "button-delete", "x");
-        let _ = node("div");
-        _.appendChild(newSpan);
-        let spanHtml = _.innerHTML;
-        _.remove();
+        let parentStub = node();
+        parentStub.appendChild(newSpan);
+        let spanHtml = parentStub.innerHTML;
+        parentStub.remove();
         return body
             .filter(element => element.charAt(0) === "#")
             .map(e => e = "<li>" + e.slice(1) + spanHtml + "</li>")
