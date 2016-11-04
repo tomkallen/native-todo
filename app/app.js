@@ -20,25 +20,30 @@ alphaNode.addEventListener('keypress', event => {
 
 });
 
-document.addEventListener('click', function(e) {
-    if (ofClass(e.target, 'button-delete')) {
-        e.target.parentElement.remove();
-    }
+document.addEventListener('click', e => {
+
+    ofClass(e.target, 'button-delete') && e.target.parentElement.remove();
+
 });
 
 function ofClass(_element, _class) {
-    return _element.className.split(" ").indexOf(_class) !== -1;
+    return _element.className.split(" ").includes(_class);
 }
 
 
 function render(note) {
 
-    let [bodyDiv, tagsDiv] = [node('div'), node('ul')];
+    let [panel, bodyDiv, tagsDiv] = [
+        node('div', 'panel panel-default'),
+        node('div'),
+        node('div', 'todo-tag-list')
+    ];
     let { body, tags, id } = note;
     [bodyDiv.id, bodyDiv.innerHTML, tagsDiv.innerHTML] = [id, body, tags];
-    container.appendChild(bodyDiv);
-    tagsDiv.className = "todo-tag-list";
-    container.appendChild(tagsDiv);
+    panel.appendChild(bodyDiv);
+    panel.appendChild(tagsDiv);
+    container.appendChild(panel);
+
 
 }
 
@@ -96,7 +101,7 @@ class Note {
             Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
             .substring(1);
-        return sub() + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
+        return "a" + sub().slice(1) + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
     }
 
     parseTags(body) {
