@@ -1,5 +1,6 @@
 const alphaNode = document.getElementById('note-text');
 const container = document.getElementById('note-container');
+const deleteButtonList = document.getElementsByClassName('button-delete');
 
 let notesArray = [];
 // notesArray is the fallback for localstorage DB
@@ -19,9 +20,20 @@ alphaNode.addEventListener('keypress', event => {
 
 });
 
+document.addEventListener('click', function(e) {
+    if (ofClass(e.target, 'button-delete')) {
+        e.target.parentElement.remove();
+    }
+});
+
+function ofClass(_element, _class) {
+    return _element.className.split(" ").indexOf(_class) !== -1;
+}
+
+
 function render(note) {
 
-    let [bodyDiv, tagsDiv] = [node('div'), node('li')];
+    let [bodyDiv, tagsDiv] = [node('div'), node('ul')];
     let { body, tags, id } = note;
     [bodyDiv.id, bodyDiv.innerHTML, tagsDiv.innerHTML] = [id, body, tags];
     container.appendChild(bodyDiv);
@@ -33,7 +45,7 @@ function render(note) {
 function createNewNote(node) {
 
     let body = node.innerHTML
-        .replace(/&nbsp;/, " ") // get rid of nonbreakings
+        .replace(/&nbsp;/g, " ") // get rid of nonbreakings
         .split(" ");
     let note = new Note(body);
     render(note);
@@ -41,9 +53,11 @@ function createNewNote(node) {
 
 }
 
-function node(element = 'div') {
-
-    return document.createElement(element);
+function node(element = 'div', _class, _html) {
+    let node = document.createElement(element);
+    if (_class) node.className = _class;
+    if (_html) node.innerHTML = _html
+    return node;
 
 }
 
@@ -86,12 +100,20 @@ class Note {
     }
 
     parseTags(body) {
-        return body.filter(element => element.charAt(0) === "#");
+        let newSpan = node("span", "button-delete", "x");
+        let _ = node("div");
+        _.appendChild(newSpan);
+        let spanHtml = _.innerHTML;
+        _.remove();
+        return body
+            .filter(element => element.charAt(0) === "#")
+            .map(e => e = "<li>" + e.slice(1) + spanHtml + "</li>")
+            .join(" ");
     }
 
     parseBody(body) {
         return body.map(element => element.charAt(0) === "#" ?
-            element = "<span>" + element + "</span>" :
+            element = '<span class="tag">' + element + '</span>' :
             element).join(" ");
     }
 

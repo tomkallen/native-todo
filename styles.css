@@ -3,7 +3,7 @@ body {
     font-size: 18px;
 }
 
-span {
+.tag {
     background-color: darkred;
     display: inline-block;
     padding: 0 1em 0 .5em;
@@ -13,4 +13,29 @@ span {
 
 .todo-tag-list {
     list-style: none;
+    margin-top: .5em;
+}
+
+li {
+    display: inline-block;
+    background-color: #72A0C1;
+    color: white;
+    font-size: .8em;
+    padding: 0 .5em;
+}
+
+.button-delete {
+    display: inline-block;
+    margin-left: 0.5em;
+    padding: .2em;
+    font-size: 1.2em;
+    color: #72A0C1;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.button-delete:hover {
+    color: #fff;
+    background-color: #72A0C1;
 }
