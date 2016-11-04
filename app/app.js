@@ -39,23 +39,23 @@ function ofClass(_element, _class) {
 
 function render(note) {
 
-    let [panel, bodyDiv, tagsDiv] = [
+    let [panelElement, bodyElement, tagsElement] = [
         node('div', 'panel panel-default'),
         node('div'),
         node('div', 'todo-tag-list')
     ];
     let { body, tags, id } = note;
-    [bodyDiv.id, bodyDiv.innerHTML, tagsDiv.innerHTML] = [id, body, tags];
-    panel.appendChild(bodyDiv);
-    panel.appendChild(tagsDiv);
-    container.appendChild(panel);
+    [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, body, tags];
+    panelElement.appendChild(bodyElement);
+    panelElement.appendChild(tagsElement);
+    container.appendChild(panelElement);
 
 
 }
 
-function createNewNote(node) {
+function createNewNote(input) {
 
-    let body = node.innerHTML
+    let body = input.innerHTML
         .replace(/&nbsp;/g, " ") // get rid of nonbreakings
         .split(" ");
     let note = new Note(body);
@@ -65,6 +65,11 @@ function createNewNote(node) {
 }
 
 function node(element = 'div', _class, _html) {
+    // accepts optional parameters:
+    // -element type
+    // -class name(s)
+    // -innerHTML
+    // and builds and returns DOM element    
 
     let node = document.createElement(element);
     if (_class) node.className += " " + _class;
@@ -74,6 +79,7 @@ function node(element = 'div', _class, _html) {
 }
 
 function initDB() {
+    // Reads from local storage and renders data if it is of type we need
 
     for (let item in localStorage) {
         let note = JSON.parse(localStorage[item])
@@ -105,6 +111,9 @@ class Note {
     }
 
     static generateUId() {
+        // Genertaes hexademical unique id and prefixes it with an 'a'
+        // to satisfy id naming rule.
+
         let sub = () =>
             Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
@@ -113,6 +122,10 @@ class Note {
     }
 
     parseTags(body) {
+        // parses note text, generates an array of <li>st items
+        // and constructs html to render
+        // this is NOT an HTML node
+
         let newSpan = node("span", "button-delete", "x");
         let parentStub = node();
         parentStub.appendChild(newSpan);
