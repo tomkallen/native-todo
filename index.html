@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="./styles.css">
 
 </head>
 
 <body>
-    <div class="note">
-        <p contenteditable id="note-text">This is the note</p>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="note">
+            <p contenteditable id="note-text">This is the note</p>
+        </div>
+        <div class="row">
+            <div id="note-container" class="col-md-10 col-md-offset-1"></div>
+        </div>
     </div>
-    <div id="note-container"></div>
     <script src="./app/app.js"></script>
 </body>
 

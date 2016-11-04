@@ -1,3 +1,10 @@
 span {
-    background-color: yellow;
+    background-color: darkred;
+    display: inline-block;
+    padding: 0 1em 0 .5em;
+    color: #fff;
+}
+
+.todo-tag-list {
+    list-style: none;
 }
