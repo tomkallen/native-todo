@@ -1,7 +1,7 @@
 {
     const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
-    
+
     let pristine = true;
     // checks whether 'input field'' was clicked
     let notesArray = [];
@@ -28,6 +28,7 @@
         // Universal listener for dynamically created elements 
 
         if (ofClass(e.target, 'button-delete')) {
+            // tags
             e.target.parentElement.remove();
         }
 
@@ -39,12 +40,13 @@
             pristine = false;
             e.target.innerHTML = '';
         }
-        
+
         if (ofClass(e.target, 'remove-todo')) {
+            // delete todo card
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
-            storageIsAvailable() && localStorage.removeItem(id);
-            parent.parentElement.remove()
+            storageIsAvailable() && localStorage.removeItem(id);            
+            parent.parentElement.style.opacity = "0.2";
 
         }
 
