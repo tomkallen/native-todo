@@ -4,9 +4,27 @@ body {
     background-color: #3B444B;
 }
 
+#input-basic {
+    display: block;
+    background-color: #3B444B;
+    border: 2px solid white;
+    border-radius: 3px;
+    margin: 1em auto;
+    width: 50%;
+    color: white;
+    font-size: .5em;
+    padding: .25em;
+    height: 2em;
+    outline: none;
+    visibility: collapse;
+}
+
 .note {
     text-align: center;
-    margin: 1.4em 0;
+    margin: .7em 0;
+    color: white;
+    font-size: 2em;
+    line-height: 1em;
 }
 
 .note-body {
@@ -79,17 +97,6 @@ li {
 .button-delete:hover {
     color: #fff;
     background-color: #A52A2A;
-}
-
-.panel {
-    padding: .4em;
-}
-
-.glyphicon {
-    color: #fff;
-    size: 1.4em;
-    display: inline-block;
-    padding: 0 1em;
 }
 
 #plus-icon {

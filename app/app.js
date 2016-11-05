@@ -1,6 +1,8 @@
 {
-    const inputField = document.getElementById('note-text');
+    const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
+    const addNote = document.getElementById('add-note');
+
 
     let pristine = true;
     // checks whether 'input field'' was clicked
@@ -17,8 +19,9 @@
 
         if (event.which === 13) {
             event.preventDefault();
-            inputField.blur();
+            inputField.style.visibility = "collapse";
             createNewNote(inputField);
+            inputField.value = "";
         }
 
     });
@@ -29,6 +32,10 @@
         if (ofClass(e.target, 'button-delete')) {
             e.target.parentElement.remove();
         }
+        if (ofClass(e.target, 'add-note')) {
+            inputField.style.visibility = "visible";
+        }
+
         if (ofClass(e.target, 'input-field') && pristine) {
             pristine = false;
             e.target.innerHTML = '';
@@ -69,7 +76,7 @@
 
     function createNewNote(input) {
 
-        let body = input.innerHTML
+        let body = input.value
             .replace(/&nbsp;/g, " ")
             // Getting rid of nonbreakings to make parser's job easier
             .split(" ");
