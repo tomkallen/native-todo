@@ -34,6 +34,14 @@
             document.getElementsByClassName('blinking-cursor')[0].remove();
             e.target.innerHTML = '';
         }
+        if (ofClass(e.target, 'remove-todo')) {
+            // alert(e.target.parentElement.id)
+            let parent = e.target.parentElement;
+            let id = JSON.stringify(parent.id);
+            storageIsAvailable() && localStorage.removeItem(id);
+            parent.parentElement.remove()
+
+        }
 
     });
 
@@ -53,7 +61,7 @@
         ];
         // appending Note class data to nodes
         let { body, tags, id } = note;
-        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, body, tags];
+        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, '<div class="remove-todo">delete</div>' + body, tags];
         panelElement.appendChild(bodyElement);
         panelElement.appendChild(tagsElement);
         container.appendChild(panelElement);

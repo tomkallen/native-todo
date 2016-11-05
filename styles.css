@@ -19,6 +19,16 @@ body {
     position: relative;
 }
 
+.remove-todo {
+    background-color: #A52A2A;
+    color: #fff;
+    padding: .1em;
+    font-size: .7em;
+    text-align: center;
+    margin: -.8em 0 1em 0;
+    cursor: pointer;
+}
+
 #note-text {
     font-size: 1.4em;
     color: #ddd;
@@ -80,6 +90,29 @@ li {
     size: 1.4em;
     display: inline-block;
     padding: 0 1em;
+}
+
+#plus-icon {
+    color: #A52A2A;
+    font-size: 3em;
+}
+
+#new-text {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.3em;
+}
+
+#add-note {
+    background-color: #ccc;
+    padding: 1em;
+    transition: all .5s;
+    cursor: pointer;
+}
+
+#add-note:hover {
+    background-color: #A52A2A;
+    color: #fff;
 }
 
 .blinking-cursor {
