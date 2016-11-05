@@ -39,9 +39,7 @@
 
     function ofClass(_element, _class) {
         // Helper to check for specific class
-
         return _element.className.split(" ").includes(_class);
-
     }
 
 
@@ -66,7 +64,8 @@
     function createNewNote(input) {
 
         let body = input.innerHTML
-            .replace(/&nbsp;/g, " ") // get rid of nonbreakings
+            .replace(/&nbsp;/g, " ")
+            // Getting rid of nonbreakings to make parser's job easier
             .split(" ");
         let note = new Note(body);
         render(note);
@@ -125,6 +124,7 @@
             // to satisfy id naming rule.
 
             let sub = () =>
+                // Randomizing hexa 2^16 pieces just to make uid look alright
                 Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1);
@@ -141,6 +141,8 @@
             parentStub.appendChild(newSpan);
             let spanHtml = parentStub.innerHTML;
             parentStub.remove();
+            //parentStub temp node is used to get outerHTML of span
+
             return body
                 .filter(element => element.charAt(0) === "#")
                 .map(e => e = "<li>" + e.slice(1) + spanHtml + "</li>")
@@ -148,6 +150,8 @@
         }
 
         parseBody(body) {
+            // checks note text and looks for tags, then wraps them in span
+            // and styles them with css
             return body.map(element => element.charAt(0) === "#" ?
                 element = '<span class="tag">' + element + '</span>' :
                 element).join(" ");
