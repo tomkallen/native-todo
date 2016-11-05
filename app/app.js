@@ -47,11 +47,13 @@
 
     function render(note) {
 
+        // Creating 3 nodes to render them later
         let [panelElement, bodyElement, tagsElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
             node('div'),
             node('div', 'todo-tag-list')
         ];
+        // appending Note class data to nodes
         let { body, tags, id } = note;
         [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, body, tags];
         panelElement.appendChild(bodyElement);
