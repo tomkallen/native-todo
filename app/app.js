@@ -1,9 +1,7 @@
 {
     const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
-    const addNote = document.getElementById('add-note');
-
-
+    
     let pristine = true;
     // checks whether 'input field'' was clicked
     let notesArray = [];
@@ -32,6 +30,7 @@
         if (ofClass(e.target, 'button-delete')) {
             e.target.parentElement.remove();
         }
+
         if (ofClass(e.target, 'add-note')) {
             inputField.style.visibility = "visible";
         }
@@ -40,6 +39,7 @@
             pristine = false;
             e.target.innerHTML = '';
         }
+        
         if (ofClass(e.target, 'remove-todo')) {
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
