@@ -9,6 +9,16 @@ body {
     margin: 1.4em 0;
 }
 
+.note-body {
+    background-color: #fff;
+    border: 1px dashed #333;
+    border-bottom: none;
+    border-top: 10px solid #BCD4E6;
+    padding: 1em;
+    height: 180px;
+    position: relative;
+}
+
 #note-text {
     font-size: 1.4em;
     color: #ddd;
@@ -28,16 +38,19 @@ body {
 .todo-tag-list {
     list-style: none;
     margin-top: .5em;
+    position: absolute;
+    bottom: 5px;
+    ;
 }
 
 li {
     display: inline-block;
-    background-color: #72A0C1;
+    background-color: #A52A2A;
     color: white;
-    font-size: .8em;
+    font-size: .7em;
     padding: 0 .5em;
     margin: 0 .2em;
-    border: 1px solid #72A0C1;
+    border: 1px solid #A52A2A;
     border-radius: 3px;
     line-height: .8em;
 }
@@ -47,7 +60,7 @@ li {
     margin-left: 0.5em;
     padding: .2em;
     font-size: 1.2em;
-    color: #72A0C1;
+    color: #A52A2A;
     background-color: #fff;
     cursor: pointer;
     transition: all .3s ease-in-out;
@@ -55,7 +68,7 @@ li {
 
 .button-delete:hover {
     color: #fff;
-    background-color: #72A0C1;
+    background-color: #A52A2A;
 }
 
 .panel {
