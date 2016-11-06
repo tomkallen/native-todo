@@ -107,6 +107,33 @@ li {
     background-color: yellow;
 }
 
+#filter {
+    margin: 1em;
+    color: #ddd;
+    padding: .5em;
+    border: 1px dashed #ddd;
+    display: none;
+}
+
+#filter-span {
+    margin-right: 6em;
+    background-color: #fff;
+    color: #3B444B;
+    display: inline-block;
+    padding: .1em .6em;
+}
+
+#reset-filter {
+    float: right;
+    color: papayawhip;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+#reset-filter:hover {
+    color: firebrick;
+}
+
 #plus-icon {
     color: #A52A2A;
     font-size: 3em;

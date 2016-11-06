@@ -15,8 +15,9 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="note">
             <p>What are your plans for today?</p>
-            <input autofocus type="text" id="input-basic">
+            <input type="text" id="input-basic">
         </div>
+
         <div class="row">
             <div id="note-container" class="col-md-10 col-md-offset-1">
                 <div id="add-note" class="add-note col-md-3 col-sm-4 note-body"><i id="plus-icon" class="fa fa-plus-square" aria-hidden="true"></i>
@@ -24,6 +25,9 @@
                 </div>
                 <!--Notes are inserted here-->
             </div>
+        </div>
+        <div id="filter">You are filtering by <span id="filter-span"></span>
+            <div id="reset-filter" class="reset-filter">reset</div>
         </div>
     </div>
     <script src="./app/app.js"></script>

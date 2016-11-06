@@ -55,7 +55,35 @@
             e.target.setAttribute("contenteditable", "true");
             e.target.classList.add("edit-mode");
         };
+        if (ofClass(e.target, 'tag')) {
+            let activeTag = e.target.innerHTML.slice(1);
+            filterCards(activeTag);
+        }
+        if (ofClass(e.target, 'reset-filter')) {
+            filterCards();
+        }
     });
+
+    function filterCards(tag) {
+        // filter function accepts tag being clicked and gets rid of all
+        // other cards that do not have such a tag as an attribute
+        let cards = document.getElementsByClassName('note-body');
+        // grab all cards        
+        if (tag) {
+            document.getElementById('filter-span').innerHTML = tag;
+            document.getElementById('filter').style.display = 'inline-block';
+        } else {
+            document.getElementById('filter').style.display = 'none';
+        }
+        for (let card = 1; card < cards.length; card++) {
+            // check if card has tags we need and filter accordingly
+            let tags = cards[card].childNodes[0].getAttribute('tags').split(" ");
+            if (tags.includes(tag) || tag == undefined) {
+                // soft reset via undefined
+                cards[card].style.display = 'inline-block'
+            } else { cards[card].style.display = 'none' }
+        }
+    }
 
     function ofClass(_element, _class) {
         // Helper to check for specific class
