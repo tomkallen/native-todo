@@ -21,14 +21,16 @@
 
     document.addEventListener('keypress', e => {
         if (ofClass(e.target, "card")) {
+            // listener for existing note cards -> save and update db on Enter
             if (e.which === 13) {
-                // prevernt \n and remove ediatble mode and get rid of styling
+                // prevent \n and remove ediatble mode and get rid of styling
                 e.preventDefault();
                 e.target.classList.remove("edit-mode");
                 e.target.setAttribute("contenteditable", "false");
                 let parent = e.target.parentElement;
                 let id = parent.id.toString();
                 parent.parentElement.remove();
+                // workaround to quickly re-render updated card
                 editNote(e.target, id);
             }
         }
@@ -132,7 +134,6 @@
 
     function storageIsAvailable() {
         // Checking availability of local storgae for the user
-
         try {
             localStorage.setItem("null", "null");
             localStorage.removeItem("null", "null");
@@ -140,7 +141,6 @@
         } catch (error) {
             return false;
         }
-
     };
 
     class Note {
