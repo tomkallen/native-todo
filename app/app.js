@@ -13,7 +13,7 @@
         // On Enter parse and store the note        
 
         if (e.which === 13 && e.target.value.length > 2) {
-            //pre empty notes from saving
+            //prevent empty notes from saving
 
             e.preventDefault();
             inputField.style.visibility = "collapse";
@@ -30,7 +30,6 @@
                 e.target.setAttribute("contenteditable", "false");
                 let parent = e.target.parentElement;
                 let id = parent.id.toString();
-                console.log("idis:", id);
                 parent.parentElement.remove();
                 editNote(e.target, id);
             }
@@ -53,7 +52,7 @@
         }
 
         if (ofClass(e.target, 'remove-todo')) {
-            // delete todo card
+
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
             storageIsAvailable() && localStorage.removeItem(id);
@@ -78,7 +77,7 @@
 
     function render(note) {
 
-        // Creating 3 nodes to render them later
+        // Creating 2 nodes to render them later
         let [panelElement, bodyElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
             node('div')
@@ -87,7 +86,6 @@
         let { body, id } = note;
         [bodyElement.id, bodyElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`];
         panelElement.appendChild(bodyElement);
-        // panelElement.appendChild(tagsElement);
         container.appendChild(panelElement);
 
 
@@ -113,22 +111,16 @@
             .replace(/&nbsp;/g, " ")
             .replace(/(<span[^>]*>)|(<\/span>)/g, "")
             .replace(/(<font[^>]*>)|(<\/span>)/g, "")
-            // Getting rid of nonbreakings to make parser's job easier
             .split(" ");
         let note = new Note(body, id);
-        console.log(note.id);
         render(note);
-        let dbId = note.id;
-        console.log(dbId);
-        if (storageIsAvailable() && localStorage.getItem(dbId) !== null) {
+        if (storageIsAvailable() && localStorage.getItem(note.id) !== null) {
             console.log(localStorage.getItem(JSON.parse(note.id)));
             localStorage.removeItem(note.id);
         }
         return storageIsAvailable() ?
             localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
             notesArray.push(note);
-
-
     }
 
     function node(element = 'div', _class, _html) {
@@ -167,7 +159,6 @@
         }
 
     }
-
 
     class Note {
 
