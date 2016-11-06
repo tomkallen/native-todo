@@ -2,8 +2,6 @@
     const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
 
-    let pristine = true;
-    // checks whether 'input field'' was clicked
     let notesArray = [];
     // notesArray is the fallback for localstorage DB
 
@@ -11,12 +9,13 @@
     // Initializing and rendering the localstorage database
     // only if it is available:
 
-    inputField.addEventListener('keypress', event => {
-        // On Enter parse and store the note
-        // out of focus == end of edit mode
+    inputField.addEventListener('keypress', e => {
+        // On Enter parse and store the note        
 
-        if (event.which === 13) {
-            event.preventDefault();
+        if (e.which === 13 && e.target.value.length > 2) {
+            //pre empty notes from saving
+
+            e.preventDefault();
             inputField.style.visibility = "collapse";
             createNewNote(inputField);
             inputField.value = "";
@@ -28,7 +27,7 @@
         // Universal listener for dynamically created elements 
 
         if (ofClass(e.target, 'button-delete')) {
-            // tags
+            // tags - not finished
             e.target.parentElement.remove();
         }
 
@@ -36,8 +35,7 @@
             inputField.style.visibility = "visible";
         }
 
-        if (ofClass(e.target, 'input-field') && pristine) {
-            pristine = false;
+        if (ofClass(e.target, 'input-field')) {
             e.target.innerHTML = '';
         }
 
@@ -45,8 +43,10 @@
             // delete todo card
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
-            storageIsAvailable() && localStorage.removeItem(id);            
+            storageIsAvailable() && localStorage.removeItem(id);
             parent.parentElement.style.opacity = "0.2";
+
+            // TODO: add onbeforeunload event?
 
         }
 
@@ -68,7 +68,7 @@
         ];
         // appending Note class data to nodes
         let { body, tags, id } = note;
-        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, '<div class="remove-todo">delete</div>' + body, tags];
+        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, '<div class="remove-todo">done!</div>' + body, tags];
         panelElement.appendChild(bodyElement);
         panelElement.appendChild(tagsElement);
         container.appendChild(panelElement);
