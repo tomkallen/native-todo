@@ -99,6 +99,14 @@ li {
     background-color: #A52A2A;
 }
 
+.card {
+    cursor: pointer;
+}
+
+.edit-mode {
+    background-color: yellow;
+}
+
 #plus-icon {
     color: #A52A2A;
     font-size: 3em;

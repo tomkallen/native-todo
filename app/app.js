@@ -22,7 +22,19 @@
         }
 
     });
-
+    document.addEventListener('keypress', e => {
+        if (ofClass(e.target, "card")) {
+            if (e.which === 13) {
+                e.preventDefault();
+                e.target.classList.remove("edit-mode");
+                e.target.setAttribute("contenteditable", "false");
+                let parent = e.target.parentElement;
+                let id = JSON.stringify(parent.id);
+                parent.parentElement.remove();
+                editNote(e.target, id);
+            }
+        }
+    })
     document.addEventListener('click', e => {
         // Universal listener for dynamically created elements 
 
@@ -49,6 +61,11 @@
             // TODO: add onbeforeunload event?
 
         }
+        if (ofClass(e.target, 'card')) {
+            e.target.setAttribute("contenteditable", "true");
+            e.target.classList.add("edit-mode");
+        };
+
 
     });
 
@@ -68,7 +85,7 @@
         ];
         // appending Note class data to nodes
         let { body, tags, id } = note;
-        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, '<div class="remove-todo">done!</div>' + body, tags];
+        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`, tags];
         panelElement.appendChild(bodyElement);
         panelElement.appendChild(tagsElement);
         container.appendChild(panelElement);
@@ -84,7 +101,26 @@
             .split(" ");
         let note = new Note(body);
         render(note);
-        return storageIsAvailable() ? localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) : notesArray.push(note);
+        return storageIsAvailable() ?
+            localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
+            notesArray.push(note);
+
+    }
+
+    function editNote(input, id) {
+
+        let body = input.innerHTML
+            .replace(/&nbsp;/g, " ")
+            // Getting rid of nonbreakings to make parser's job easier
+            .split(" ");
+        let note = new Note(body, id);
+        render(note);
+        if (storageIsAvailable() && localStorage.getItem(JSON.parse(note.id))) {
+            localStorage.removeItem(JSON.stringify(note.id));
+        }
+        return storageIsAvailable() ?
+            localStorage.setItem(note.id, JSON.stringify(note)) :
+            notesArray.push(note);
 
     }
 
@@ -128,10 +164,10 @@
 
     class Note {
 
-        constructor(body) {
+        constructor(body, id) {
             this.body = this.parseBody(body);
             this.tags = this.parseTags(body);
-            this.id = Note.generateUId();
+            this.id = id || Note.generateUId();
         }
 
         static generateUId() {
