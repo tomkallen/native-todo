@@ -29,7 +29,7 @@
                 e.target.classList.remove("edit-mode");
                 e.target.setAttribute("contenteditable", "false");
                 let parent = e.target.parentElement;
-                let id = JSON.stringify(parent.id);
+                let id = parent.id;
                 parent.parentElement.remove();
                 editNote(e.target, id);
             }
@@ -78,16 +78,15 @@
     function render(note) {
 
         // Creating 3 nodes to render them later
-        let [panelElement, bodyElement, tagsElement] = [
+        let [panelElement, bodyElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
-            node('div'),
-            node('div', 'todo-tag-list')
+            node('div')
         ];
         // appending Note class data to nodes
-        let { body, tags, id } = note;
-        [bodyElement.id, bodyElement.innerHTML, tagsElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`, tags];
+        let { body, id } = note;
+        [bodyElement.id, bodyElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`];
         panelElement.appendChild(bodyElement);
-        panelElement.appendChild(tagsElement);
+        // panelElement.appendChild(tagsElement);
         container.appendChild(panelElement);
 
 
@@ -115,11 +114,11 @@
             .split(" ");
         let note = new Note(body, id);
         render(note);
-        if (storageIsAvailable() && localStorage.getItem(JSON.parse(note.id))) {
+        if (storageIsAvailable() && localStorage.getItem(JSON.parse(note.id))!==null) {
             localStorage.removeItem(JSON.stringify(note.id));
         }
         return storageIsAvailable() ?
-            localStorage.setItem(note.id, JSON.stringify(note)) :
+            localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
             notesArray.push(note);
 
     }
@@ -166,7 +165,6 @@
 
         constructor(body, id) {
             this.body = this.parseBody(body);
-            this.tags = this.parseTags(body);
             this.id = id || Note.generateUId();
         }
 
