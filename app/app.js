@@ -2,13 +2,11 @@
     const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
 
-    let notesArray = [];
     let _tags = new Set();
-    // notesArray is the fallback for localstorage DB
 
+    if (!storageIsAvailable()) console.error("Your localStorage is not available")
     storageIsAvailable() && initDB();
     // Initializing and rendering the localstorage database
-    // only if it is available:
 
     inputField.addEventListener('keypress', e => {
         // On Enter parse and store the note        
@@ -49,7 +47,7 @@
             // safely removes note from DB
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
-            storageIsAvailable() && localStorage.removeItem(id);
+            localStorage.removeItem(id);
             parent.parentElement.style.opacity = "0.2";
 
         }
@@ -91,11 +89,10 @@
             .split(" ");
         let note = new Note(body);
         render(note);
-        return storageIsAvailable() ?
-            localStorage.setItem(
-                JSON.stringify(note.id),
-                JSON.stringify(note)) :
-            notesArray.push(note);
+        return localStorage.setItem(
+            JSON.stringify(note.id),
+            JSON.stringify(note));
+
 
     }
 
@@ -108,16 +105,14 @@
             .split(" ");
         let note = new Note(body, id);
         render(note);
-        if (storageIsAvailable() && localStorage.getItem(note.id) !== null) {
+        if (localStorage.getItem(note.id) !== null) {
             // checking if this note is really in the localstorage
             // if it is then remove it and update
             localStorage.removeItem(note.id);
         }
-        return storageIsAvailable() ?
-            localStorage.setItem(
-                JSON.stringify(note.id),
-                JSON.stringify(note)) :
-            notesArray.push(note);
+        return localStorage.setItem(
+            JSON.stringify(note.id),
+            JSON.stringify(note));
     }
 
     function node(element = 'div', _class, _html) {
@@ -141,8 +136,7 @@
                 // objectifying storage value
                 let tags = note.tags.split(" ");
                 tags.forEach(tag => tag.length && _tags.add(tag));
-                // updating Set of tags             
-                console.log(_tags);
+                // updating Set of tags
                 render(note);
             }
         }
@@ -168,7 +162,6 @@
             this.body = this.parseBody(body);
             this.id = id;
             this.tags = this.parseTags(body);
-
         }
 
         static generateUId() {
