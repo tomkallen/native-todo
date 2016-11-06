@@ -79,6 +79,7 @@
         [bodyElement.id, bodyElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`];
         panelElement.appendChild(bodyElement);
         container.appendChild(panelElement);
+        bodyElement.setAttribute("tags", note.tags);
 
     }
 
@@ -139,7 +140,7 @@
                 let note = JSON.parse(localStorage[item]);
                 // objectifying storage value
                 let tags = note.tags.split(" ");
-                tags.forEach(i => i.length && _tags.add(i));
+                tags.forEach(tag => tag.length && _tags.add(tag));
                 // updating Set of tags             
                 console.log(_tags);
                 render(note);
@@ -167,7 +168,7 @@
             this.body = this.parseBody(body);
             this.id = id;
             this.tags = this.parseTags(body);
-            console.log(this.tags);
+
         }
 
         static generateUId() {
@@ -182,11 +183,13 @@
             return "a" + sub().slice(1) + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
         }
 
+
         parseTags(body) {
             let t = "";
             for (let element of body) {
                 if (element.charAt(0) === "#") t += " " + element.substring(1);
             }
+
             return t;
 
         }
