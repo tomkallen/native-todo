@@ -25,6 +25,7 @@
     document.addEventListener('keypress', e => {
         if (ofClass(e.target, "card")) {
             if (e.which === 13) {
+                // prevernt \n and remove ediatble mode and get rid of styling
                 e.preventDefault();
                 e.target.classList.remove("edit-mode");
                 e.target.setAttribute("contenteditable", "false");
@@ -38,34 +39,25 @@
     document.addEventListener('click', e => {
         // Universal listener for dynamically created elements 
 
-        if (ofClass(e.target, 'button-delete')) {
-            // tags - not finished
-            e.target.parentElement.remove();
-        }
-
         if (ofClass(e.target, 'add-note')) {
+            // hide new note input field
             inputField.style.visibility = "visible";
         }
 
-        if (ofClass(e.target, 'input-field')) {
-            e.target.innerHTML = '';
-        }
-
         if (ofClass(e.target, 'remove-todo')) {
-
+            // safely removes note from DB
             let parent = e.target.parentElement;
             let id = JSON.stringify(parent.id);
             storageIsAvailable() && localStorage.removeItem(id);
             parent.parentElement.style.opacity = "0.2";
 
-            // TODO: add onbeforeunload event?
-
         }
+
         if (ofClass(e.target, 'card')) {
+            // activate edit mode and add some styling
             e.target.setAttribute("contenteditable", "true");
             e.target.classList.add("edit-mode");
         };
-
 
     });
 
@@ -73,7 +65,6 @@
         // Helper to check for specific class
         return _element.className.split(" ").includes(_class);
     }
-
 
     function render(note) {
 
@@ -87,7 +78,6 @@
         [bodyElement.id, bodyElement.innerHTML] = [id, `<div class="remove-todo">done!</div><div class="card">${body}</div>`];
         panelElement.appendChild(bodyElement);
         container.appendChild(panelElement);
-
 
     }
 
