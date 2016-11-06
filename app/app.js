@@ -2,8 +2,6 @@
     const inputField = document.getElementById('input-basic');
     const container = document.getElementById('note-container');
 
-    let _tags = new Set();
-
     if (!storageIsAvailable()) console.error("Your localStorage is not available")
     storageIsAvailable() && initDB();
     // Initializing and rendering the localstorage database
@@ -48,7 +46,6 @@
             let id = JSON.stringify(parent.id);
             localStorage.removeItem(id);
             parent.parentElement.style.opacity = "0.2";
-
         }
         if (ofClass(e.target, 'card')) {
             // activate edit mode and add some styling
@@ -70,6 +67,7 @@
         let cards = document.getElementsByClassName('note-body');
         // grab all cards        
         if (tag) {
+            // means filter panel should become visible
             document.getElementById('filter-span').innerHTML = tag;
             document.getElementById('filter').style.display = 'inline-block';
         } else {
@@ -78,7 +76,7 @@
         for (let card = 1; card < cards.length; card++) {
             // check if card has tags we need and filter accordingly
             let tags = cards[card].childNodes[0].getAttribute('tags').split(" ");
-            if (tags.includes(tag) || tag == undefined) {
+            if (tags.includes(tag) || tag === undefined) {
                 // soft reset via undefined
                 cards[card].style.display = 'inline-block'
             } else { cards[card].style.display = 'none' }
@@ -91,7 +89,7 @@
     };
 
     function render(note) {
-        // Creating 2 nodes to render them later
+        // Creating nodes to render them later
         let [panelElement, bodyElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
             node('div')
@@ -118,6 +116,7 @@
 
     function editNote(input, id) {
         let body = input.innerHTML
+            // this is done to re-evaluate and get rid of dirty tags
             .replace(/&nbsp;/g, " ")
             .replace(/(<span[^>]*>)|(<\/span>)/g, "")
             .replace(/(<font[^>]*>)|(<\/span>)/g, "")
@@ -126,7 +125,7 @@
         render(note);
         if (localStorage.getItem(note.id) !== null) {
             // checking if this note is really in the localstorage
-            // if it is then remove it and update
+            // if it is then remove it and update (just in case)
             localStorage.removeItem(note.id);
         }
         return localStorage.setItem(
@@ -139,7 +138,7 @@
         // -element type
         // -class name(s)
         // -innerHTML
-        // and builds and returns HTML node    
+        // and builds and returns HTML node   
 
         let node = document.createElement(element);
         if (_class) node.className += " " + _class;
@@ -148,13 +147,10 @@
     };
 
     function initDB() {
+        // reach for local storage, parse Note class objects and render them
         for (let item in localStorage) {
             if (item) {
                 let note = JSON.parse(localStorage[item]);
-                // objectifying storage value
-                let tags = note.tags.split(" ");
-                tags.forEach(tag => tag.length && _tags.add(tag));
-                // updating Set of tags
                 render(note);
             }
         }
@@ -174,6 +170,7 @@
     class Note {
 
         constructor(body, id = Note.generateUId()) {
+            // newly created notes do not pass second argument
             this.body = this.parseBody(body);
             this.id = id;
             this.tags = this.parseTags(body);
@@ -193,6 +190,7 @@
 
 
         parseTags(body) {
+            // convert to local storage friendly format
             let t = "";
             for (let element of body) {
                 if (element.charAt(0) === "#") t += " " + element.substring(1);
