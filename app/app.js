@@ -3,6 +3,7 @@
     const container = document.getElementById('note-container');
 
     let notesArray = [];
+    let _tags = new Set();
     // notesArray is the fallback for localstorage DB
 
     storageIsAvailable() && initDB();
@@ -90,7 +91,9 @@
         let note = new Note(body);
         render(note);
         return storageIsAvailable() ?
-            localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
+            localStorage.setItem(
+                JSON.stringify(note.id),
+                JSON.stringify(note)) :
             notesArray.push(note);
 
     }
@@ -105,11 +108,14 @@
         let note = new Note(body, id);
         render(note);
         if (storageIsAvailable() && localStorage.getItem(note.id) !== null) {
-            console.log(localStorage.getItem(JSON.parse(note.id)));
+            // checking if this note is really in the localstorage
+            // if it is then remove it and update
             localStorage.removeItem(note.id);
         }
         return storageIsAvailable() ?
-            localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
+            localStorage.setItem(
+                JSON.stringify(note.id),
+                JSON.stringify(note)) :
             notesArray.push(note);
     }
 
@@ -128,11 +134,16 @@
     }
 
     function initDB() {
-        // Reads from local storage and renders data if it is of type we need
-
         for (let item in localStorage) {
-            let note = JSON.parse(localStorage[item])
-            note.body && render(note);
+            if (item) {
+                let note = JSON.parse(localStorage[item]);
+                // objectifying storage value
+                let tags = note.tags.split(" ");
+                tags.forEach(i => i.length && _tags.add(i));
+                // updating Set of tags             
+                console.log(_tags);
+                render(note);
+            }
         }
 
     }
@@ -152,9 +163,11 @@
 
     class Note {
 
-        constructor(body, id) {
+        constructor(body, id = Note.generateUId()) {
             this.body = this.parseBody(body);
-            this.id = id || Note.generateUId();
+            this.id = id;
+            this.tags = this.parseTags(body);
+            console.log(this.tags);
         }
 
         static generateUId() {
@@ -169,12 +182,21 @@
             return "a" + sub().slice(1) + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
         }
 
+        parseTags(body) {
+            let t = "";
+            for (let element of body) {
+                if (element.charAt(0) === "#") t += " " + element.substring(1);
+            }
+            return t;
+
+        }
         parseBody(body) {
             // checks note text and looks for tags, then wraps them in span
             // and styles them with css
-            return body.map(element => element.charAt(0) === "#" ?
-                element = '<span class="tag">' + element + '</span>' :
-                element).join(" ");
+            return body
+                .map(element => element.charAt(0) === "#" ?
+                    element = "<span class='tag'>" + element + "</span>" :
+                    element).join(" ");
         }
 
     }
