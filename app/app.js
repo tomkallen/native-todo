@@ -29,7 +29,8 @@
                 e.target.classList.remove("edit-mode");
                 e.target.setAttribute("contenteditable", "false");
                 let parent = e.target.parentElement;
-                let id = parent.id;
+                let id = parent.id.toString();
+                console.log("idis:", id);
                 parent.parentElement.remove();
                 editNote(e.target, id);
             }
@@ -110,16 +111,23 @@
 
         let body = input.innerHTML
             .replace(/&nbsp;/g, " ")
+            .replace(/(<span[^>]*>)|(<\/span>)/g, "")
+            .replace(/(<font[^>]*>)|(<\/span>)/g, "")
             // Getting rid of nonbreakings to make parser's job easier
             .split(" ");
         let note = new Note(body, id);
+        console.log(note.id);
         render(note);
-        if (storageIsAvailable() && localStorage.getItem(JSON.parse(note.id))!==null) {
-            localStorage.removeItem(JSON.stringify(note.id));
+        let dbId = note.id;
+        console.log(dbId);
+        if (storageIsAvailable() && localStorage.getItem(dbId) !== null) {
+            console.log(localStorage.getItem(JSON.parse(note.id)));
+            localStorage.removeItem(note.id);
         }
         return storageIsAvailable() ?
             localStorage.setItem(JSON.stringify(note.id), JSON.stringify(note)) :
             notesArray.push(note);
+
 
     }
 
@@ -178,24 +186,6 @@
                 .toString(16)
                 .substring(1);
             return "a" + sub().slice(1) + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
-        }
-
-        parseTags(body) {
-            // parses note text, generates an array of <li>st items
-            // and constructs html to render
-            // this is NOT an HTML node
-
-            let newSpan = node("span", "button-delete", "x");
-            let parentStub = node();
-            parentStub.appendChild(newSpan);
-            let spanHtml = parentStub.innerHTML;
-            parentStub.remove();
-            //parentStub temp node is used to get outerHTML of span
-
-            return body
-                .filter(element => element.charAt(0) === "#")
-                .map(e => e = "<li>" + e.slice(1) + spanHtml + "</li>")
-                .join(" ");
         }
 
         parseBody(body) {
