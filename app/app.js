@@ -4,10 +4,10 @@
 
     if (!storageIsAvailable()) console.error("Your localStorage is not available")
     storageIsAvailable() && initDB();
-    // Initializing and rendering the localstorage database
+    // initializing and rendering the localstorage database
 
     inputField.addEventListener('keypress', e => {
-        // On Enter parse and store the note 
+        // on Enter parse and store the note 
         if (e.which === 13 && e.target.value.length > 2) {
             //prevent empty notes from saving
             e.preventDefault();
@@ -21,7 +21,7 @@
         if (ofClass(e.target, "card")) {
             // listener for existing note cards -> save and update db on Enter
             if (e.which === 13) {
-                // prevent \n and remove ediatble mode and get rid of styling
+                // prevent \n and remove editable mode and get rid of styling
                 e.preventDefault();
                 e.target.classList.remove("edit-mode");
                 e.target.setAttribute("contenteditable", "false");
@@ -35,7 +35,7 @@
     });
 
     document.addEventListener('click', e => {
-        // Universal listener for dynamically created elements 
+        // universal listener for dynamically created elements 
         if (ofClass(e.target, 'add-note')) {
             // hide new note input field
             inputField.style.visibility = "visible";
@@ -84,12 +84,12 @@
     }
 
     function ofClass(_element, _class) {
-        // Helper to check for specific class
+        // helper to check for specific class
         return _element.className.split(" ").includes(_class);
     };
 
     function render(note) {
-        // Creating nodes to render them later
+        // creating nodes to render
         let [panelElement, bodyElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
             node('div')
@@ -105,7 +105,7 @@
     function createNewNote(input) {
         let body = input.value
             .replace(/&nbsp;/g, " ")
-            // Getting rid of nonbreakings to make parser's job easier
+            // getting rid of nonbreakings to make parser's job easier
             .split(" ");
         let note = new Note(body);
         render(note);
@@ -134,7 +134,7 @@
     };
 
     function node(element = 'div', _class, _html) {
-        // Helper, accepts optional parameters:
+        // helper, accepts optional parameters:
         // -element type
         // -class name(s)
         // -innerHTML
@@ -147,7 +147,7 @@
     };
 
     function initDB() {
-        // reach for local storage, parse Note class objects and render them
+        // reaches for the local storage, parses Note class objects and renders them
         for (let item in localStorage) {
             if (item) {
                 let note = JSON.parse(localStorage[item]);
@@ -157,7 +157,7 @@
     };
 
     function storageIsAvailable() {
-        // Checking availability of local storgae for the user
+        // checking availability of the local storage for the user
         try {
             localStorage.setItem("null", "null");
             localStorage.removeItem("null", "null");
@@ -177,8 +177,8 @@
         }
 
         static generateUId() {
-            // Genertaes hexademical unique id and prefixes it with an 'a'
-            // to satisfy id naming rule.
+            // generates hexademical unique id and prefixes it with an 'a'
+            // to satisfy w3c naming rules.
 
             let sub = () =>
                 // Randomizing hexa 2^16 pieces just to make uid look alright
@@ -188,9 +188,8 @@
             return "a" + sub().slice(1) + sub() + "-" + sub() + "-" + sub() + "-" + sub() + "-" + sub() + sub() + sub();
         }
 
-
         parseTags(body) {
-            // convert to local storage friendly format
+            // converts to local storage friendly format
             let t = "";
             for (let element of body) {
                 if (element.charAt(0) === "#") t += " " + element.substring(1);
