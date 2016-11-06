@@ -9,18 +9,16 @@
     // Initializing and rendering the localstorage database
 
     inputField.addEventListener('keypress', e => {
-        // On Enter parse and store the note        
-
+        // On Enter parse and store the note 
         if (e.which === 13 && e.target.value.length > 2) {
             //prevent empty notes from saving
-
             e.preventDefault();
             inputField.style.visibility = "collapse";
             createNewNote(inputField);
             inputField.value = "";
         }
-
     });
+
     document.addEventListener('keypress', e => {
         if (ofClass(e.target, "card")) {
             if (e.which === 13) {
@@ -34,15 +32,14 @@
                 editNote(e.target, id);
             }
         }
-    })
+    });
+
     document.addEventListener('click', e => {
         // Universal listener for dynamically created elements 
-
         if (ofClass(e.target, 'add-note')) {
             // hide new note input field
             inputField.style.visibility = "visible";
         }
-
         if (ofClass(e.target, 'remove-todo')) {
             // safely removes note from DB
             let parent = e.target.parentElement;
@@ -51,22 +48,19 @@
             parent.parentElement.style.opacity = "0.2";
 
         }
-
         if (ofClass(e.target, 'card')) {
             // activate edit mode and add some styling
             e.target.setAttribute("contenteditable", "true");
             e.target.classList.add("edit-mode");
         };
-
     });
 
     function ofClass(_element, _class) {
         // Helper to check for specific class
         return _element.className.split(" ").includes(_class);
-    }
+    };
 
     function render(note) {
-
         // Creating 2 nodes to render them later
         let [panelElement, bodyElement] = [
             node('div', 'col-md-3  col-sm-4 note-body'),
@@ -78,11 +72,9 @@
         panelElement.appendChild(bodyElement);
         container.appendChild(panelElement);
         bodyElement.setAttribute("tags", note.tags);
-
-    }
+    };
 
     function createNewNote(input) {
-
         let body = input.value
             .replace(/&nbsp;/g, " ")
             // Getting rid of nonbreakings to make parser's job easier
@@ -92,12 +84,9 @@
         return localStorage.setItem(
             JSON.stringify(note.id),
             JSON.stringify(note));
-
-
-    }
+    };
 
     function editNote(input, id) {
-
         let body = input.innerHTML
             .replace(/&nbsp;/g, " ")
             .replace(/(<span[^>]*>)|(<\/span>)/g, "")
@@ -113,7 +102,7 @@
         return localStorage.setItem(
             JSON.stringify(note.id),
             JSON.stringify(note));
-    }
+    };
 
     function node(element = 'div', _class, _html) {
         // Helper, accepts optional parameters:
@@ -126,8 +115,7 @@
         if (_class) node.className += " " + _class;
         if (_html) node.innerHTML = _html
         return node;
-
-    }
+    };
 
     function initDB() {
         for (let item in localStorage) {
@@ -140,8 +128,7 @@
                 render(note);
             }
         }
-
-    }
+    };
 
     function storageIsAvailable() {
         // Checking availability of local storgae for the user
@@ -154,7 +141,7 @@
             return false;
         }
 
-    }
+    };
 
     class Note {
 
@@ -182,10 +169,9 @@
             for (let element of body) {
                 if (element.charAt(0) === "#") t += " " + element.substring(1);
             }
-
             return t;
-
         }
+
         parseBody(body) {
             // checks note text and looks for tags, then wraps them in span
             // and styles them with css
@@ -194,6 +180,5 @@
                     element = "<span class='tag'>" + element + "</span>" :
                     element).join(" ");
         }
-
     }
 }
